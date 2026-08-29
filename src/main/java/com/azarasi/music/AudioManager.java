@@ -8,8 +8,8 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.Text;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -29,8 +29,8 @@ public class AudioManager {
             playerManager.loadItem(url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
-                    server.getPlayerManager().broadcast(
-                        Text.literal("▶ 再生開始: " + track.getInfo().title), false
+                    server.getPlayerList().broadcastSystemMessage(
+                        Component.literal("▶ 再生開始: " + track.getInfo().title), false
                     );
                     audioPlayer.playTrack(track);
                     // ここでデコードされたオーディオフレームをマイクラの音声チャンネルに一斉配信する
@@ -42,23 +42,23 @@ public class AudioManager {
                     if (firstTrack == null) {
                         firstTrack = playlist.getTracks().get(0);
                     }
-                    server.getPlayerManager().broadcast(
-                        Text.literal("▶ プレイリストから再生: " + firstTrack.getInfo().title), false
+                    server.getPlayerList().broadcastSystemMessage(
+                        Component.literal("▶ プレイリストから再生: " + firstTrack.getInfo().title), false
                     );
                     audioPlayer.playTrack(firstTrack);
                 }
 
                 @Override
                 public void noMatches() {
-                    server.getPlayerManager().broadcast(
-                        Text.literal("❌ 指定されたURLから曲が見つからなかったよ。"), false
+                    server.getPlayerList().broadcastSystemMessage(
+                        Component.literal("❌ 指定されたURLから曲が見つからなかったよ。"), false
                     );
                 }
 
                 @Override
                 public void loadFailed(FriendlyException exception) {
-                    server.getPlayerManager().broadcast(
-                        Text.literal("❌ 再生エラー: " + exception.getMessage()), false
+                    server.getPlayerList().broadcastSystemMessage(
+                        Component.literal("❌ 再生エラー: " + exception.getMessage()), false
                     );
                 }
             });
