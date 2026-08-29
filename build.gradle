@@ -16,8 +16,6 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     // Yarnではなく公式Mojangマッピングを使用（26.1以降はこれ一択）
-    mappings loom.officialMojangMappings()
-
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
