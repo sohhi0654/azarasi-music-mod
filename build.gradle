@@ -1,7 +1,18 @@
-plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.fabricmc.net/' }
+    }
+    dependencies {
+        // Loom内部のASMを Java 25 (Class file 69) 対応の最新版に強制差し替え
+        classpath 'org.ow2.asm:asm:9.7'
+        classpath 'org.ow2.asm:asm-commons:9.7'
+        classpath 'net.fabricmc:fabric-loom:1.9-SNAPSHOT'
+    }
 }
+
+apply plugin: 'net.fabricmc.loom'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 version = project.mod_version
 group = project.maven_group
@@ -46,7 +57,6 @@ remapJar {
     inputFile = shadowJar.archiveFile
 }
 
-// GradleにJava 25のJDKを使わせるToolchain設定
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
