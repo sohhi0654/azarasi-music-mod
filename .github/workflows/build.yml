@@ -13,10 +13,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # マイクラコンパイル用の Java 25
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           java-version: '25'
+          distribution: 'temurin'
+
+      # Gradle実行用の Java 21（これがメインになる）
+      - name: Set up JDK 21 (for Gradle)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Setup Gradle
