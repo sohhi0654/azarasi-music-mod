@@ -1,6 +1,6 @@
 plugins {
     id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '9.2.2'
     id 'java'
 }
 
@@ -15,7 +15,8 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    // Yarnではなく公式Mojangマッピングを使用（26.1以降はこれ一択）
+    // 26.1以降のMinecraftは難読化されていないため、mappingsの指定は不要（指定するとエラーになる）
+
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
