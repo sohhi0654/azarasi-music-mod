@@ -1,18 +1,8 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabricmc.net/' }
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'net.fabricmc:fabric-loom:1.8-SNAPSHOT'
-        classpath 'com.github.johnrengelman:shadow:8.1.1'
-    }
+plugins {
+    id 'net.fabricmc.loom' version '1.8.9'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
 }
-
-apply plugin: 'net.fabricmc.loom'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java'
 
 version = project.mod_version
 group = project.maven_group
