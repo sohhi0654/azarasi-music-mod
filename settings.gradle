@@ -4,6 +4,13 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'net.fabricmc.loom') {
+                useModule("net.fabricmc:fabric-loom:${requested.version}")
+            }
+        }
+    }
 }
 
 rootProject.name = 'azarasi-music-mod'
