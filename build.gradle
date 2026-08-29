@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
@@ -15,9 +15,11 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // Yarnではなく公式Mojangマッピングを使用（26.1以降はこれ一択）
+    mappings loom.officialMojangMappings()
+
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // YouTube解析ライブラリ（ビルド時にjar内へ丸ごと埋め込み）
     implementation 'dev.arbjerg:lavaplayer:2.2.1'
@@ -37,14 +39,14 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 // 外部ライブラリを1つのjarに固める処理
+// 26.1以降はリマップ処理自体が不要になったため、shadowJarの出力がそのまま最終成果物
 shadowJar {
     configurations = [project.configurations.shadow]
-    archiveClassifier.set('all')
+    archiveClassifier.set('')
 }
 
-remapJar {
+build {
     dependsOn shadowJar
-    inputFile = shadowJar.archiveFile
 }
 
 java {
