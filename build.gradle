@@ -30,8 +30,9 @@ processResources {
     }
 }
 
+// Java 25 向けコンパイル設定
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 // 外部ライブラリを1つのjarに固める処理
@@ -43,4 +44,11 @@ shadowJar {
 remapJar {
     dependsOn shadowJar
     inputFile = shadowJar.archiveFile
+}
+
+// GradleにJava 25のJDKを使わせるToolchain設定
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
