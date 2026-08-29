@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.loom' version '1.8.9'
+    id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
