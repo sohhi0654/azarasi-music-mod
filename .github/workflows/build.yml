@@ -20,17 +20,18 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      # Gradle実行用の Java 21（これがメインになる）
+      # Gradle本体実行用の Java 21
       - name: Set up JDK 21 (for Gradle)
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
+      # Loom 1.7と完全に噛み合う Gradle 8.10.2 を指定
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.12'
+          gradle-version: '8.10.2'
 
       - name: Build with Gradle
         run: gradle build
