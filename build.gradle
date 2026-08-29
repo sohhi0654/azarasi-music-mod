@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.8-SNAPSHOT'
+    id 'fabric-loom' version '1.11-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
@@ -31,9 +31,9 @@ processResources {
     }
 }
 
-// Java 25 向けコンパイル設定
+// Java 21 向けコンパイル設定
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
+    it.options.release = 21
 }
 
 // 外部ライブラリを1つのjarに固める処理
@@ -49,6 +49,6 @@ remapJar {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
