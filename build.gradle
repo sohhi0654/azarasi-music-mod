@@ -31,9 +31,10 @@ processResources {
     }
 }
 
-// Java 21 向けコンパイル設定
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 // 外部ライブラリを1つのjarに固める処理
