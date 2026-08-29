@@ -1,39 +1,54 @@
-Run gradle build
+plugins {
+    id 'net.fabricmc.loom' version '1.9-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
+}
 
-Welcome to Gradle 9.7.1!
+version = project.mod_version
+group = project.maven_group
 
-Here are the highlights of this release:
- - Isolated Projects graduates to incubating
- - Broader Configuration Cache compatibility
- - Resilient Sync helps you fix broken builds
- - More source locations in problem reports
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.lavalink.dev/releases' }
+}
 
-For more details see https://docs.gradle.org/9.7.1/release-notes.html
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-Starting a Gradle Daemon (subsequent builds will be faster)
+    // YouTube解析ライブラリ（ビルド時にjar内へ丸ごと埋め込み）
+    implementation 'dev.arbjerg:lavaplayer:2.2.1'
+    shadow 'dev.arbjerg:lavaplayer:2.2.1'
+}
 
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
 
-FAILURE: Build failed with an exception.
-[Incubating] Problems report is available at: file:///home/runner/work/azarasi-music-mod/azarasi-music-mod/build/reports/problems/problems-report.html
+// Java 25 向けコンパイル設定
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+}
 
-Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+// 外部ライブラリを1つのjarに固める処理
+shadowJar {
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set('all')
+}
 
-* Where:
-Build file '/home/runner/work/azarasi-music-mod/azarasi-music-mod/build.gradle' line: 14
+remapJar {
+    dependsOn shadowJar
+    inputFile = shadowJar.archiveFile
+}
 
-
-You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-
-For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-* What went wrong:
-A problem occurred evaluating root project 'azarasi-music-mod'.
-> Plugin with id 'net.fabricmc.loom' not found.
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights from a Build Scan (powered by Develocity).
-> Get more help at https://help.gradle.org.
-
-BUILD FAILED in 16s
-Error: Process completed with exit code 1.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
